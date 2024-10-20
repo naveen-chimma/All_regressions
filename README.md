@@ -63,26 +63,49 @@ The script will output the following metrics for each model:
 ## Example Output for Random Forest Classifier:
 ------ Random Forest Classifier ------
 
-Number of estimators: [3]
+Number of estimators: [11]
 
-Train accuracy: 0.9333
+Train accuracy: 1.0000
 
-Test accuracy: 0.9000
+Test accuracy:1.0000
 
-Confusion Matrix:
-
-[[25  3  0]
-
-  [ 2 30  3]
- 
- [ 0  5 32]]
-
-Classification Report:
+Train classification report:
               precision    recall  f1-score   support
 
-           0       0.93      0.89      0.91        28
-           1       0.88      0.86      0.87        35
-           2       0.91      0.94      0.92        34
+           0       1.00      1.00      1.00        49
+           1       1.00      1.00      1.00        54
+           2       1.00      1.00      1.00        39
+
+    accuracy                           1.00       142
+   macro avg       1.00      1.00      1.00       142
+weighted avg       1.00      1.00      1.00       142
+
+Train confusion matrix:
+
+[[49  0  0]
+
+ [ 0 54  0]
+ 
+ [ 0  0 39]]
+ 
+Test classification report:
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        10
+           1       1.00      1.00      1.00        17
+           2       1.00      1.00      1.00         9
+
+    accuracy                           1.00        36
+   macro avg       1.00      1.00      1.00        36
+weighted avg       1.00      1.00      1.00        36
+
+Test confusion matrix:
+
+[[10  0  0]
+
+ [ 0 17  0]
+ 
+ [ 0  0  9]]
 
 -----------------------------------
 
