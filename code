@@ -3,16 +3,16 @@ import sys
 import pandas as pd
 import sklearn
 from sklearn.model_selection import train_test_split
-from sklearn import datasets
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB, MultinomialNB
+from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import r2_score,mean_squared_error,mean_absolute_error
-from sklearn.metrics import accuracy_score,classification_report,confusion_matrix
+from sklearn.metrics import r2_score, mean_squared_error, accuracy_score, classification_report, confusion_matrix
 import warnings
+
 warnings.filterwarnings('ignore')
+
 def categorize_profit(value):
     if value < 50000:
         return 0 
@@ -22,36 +22,39 @@ def categorize_profit(value):
         return 2  
 
 class All_Regressions():
-    def __init__(self,location):
+    def __init__(self, location):
         try:
             self.df = pd.read_csv(location)
-            self.df['State'] = self.df['State'].map({'New York':'0','California':'1','Florida':'2'})
+            self.df['State'] = self.df['State'].map({'New York': '0', 'California': '1', 'Florida': '2'})
             self.df['Profit'] = self.df['Profit'].apply(categorize_profit)
-            self.X = self.df.drop(columns = ['Profit'],axis=1)
+            self.X = self.df.drop(columns=['Profit'], axis=1)
             self.y = self.df['Profit']
-            print(f"Data loaded sucessfully")
+            print(f"Data loaded successfully")
         except Exception as e:
-            print(f"Error occured in init method is :{e}")
+            print(f"Error occurred in init method: {e}")
+
     def training(self):
         try:
             self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=20)
-            print(f"Data split sucessfully")
+            print(f"Data split successfully")
         except Exception as e:
-            print(f"Error occured in training method is :{e}")
+            print(f"Error occurred in training method: {e}")
+
     def linear_regression(self):
         try:
             print("\n------ Linear Regression ------\n")
             self.lr = LinearRegression()
-            self.lr.fit(self.X_train,self.y_train)
+            self.lr.fit(self.X_train, self.y_train)
             self.y_train_pred = self.lr.predict(self.X_train)
             self.y_test_pred = self.lr.predict(self.X_test)
-            print(f"Train accuracy is :{r2_score(self.y_train,self.y_train_pred):.4f}")
-            print(f"Train loss is :{mean_squared_error(self.y_train,self.y_train_pred):.4f}")
-            print(f"Test accuracy is :{r2_score(self.y_test,self.y_test_pred):.4f}")
-            print(f"Test loss is :{mean_squared_error(self.y_test,self.y_test_pred):.4f}")
+            print(f"Train accuracy is: {r2_score(self.y_train, self.y_train_pred):.4f}")
+            print(f"Train loss is: {mean_squared_error(self.y_train, self.y_train_pred):.4f}")
+            print(f"Test accuracy is: {r2_score(self.y_test, self.y_test_pred):.4f}")
+            print(f"Test loss is: {mean_squared_error(self.y_test, self.y_test_pred):.4f}")
         except Exception as e:
-            print(f"Error occured in linear_regression method is :{e}")
+            print(f"Error occurred in linear_regression method: {e}")
         print("\n-----------------------------------")
+
     def logistic_regression(self):
         try:
             print("\n------ Logistic Regression ------\n")
@@ -68,89 +71,88 @@ class All_Regressions():
         except Exception as e:
             print(f"Error occurred in logistic_regression method: {e}")
         print("\n-----------------------------------")
+
     def knn(self):
         try:
-            print("\n------ K_nearest neighbour ------\n")
+            print("\n------ K-nearest Neighbour ------\n")
             self.knn = KNeighborsClassifier(n_neighbors=5)
-            self.knn.fit(self.X_train,self.y_train)
+            self.knn.fit(self.X_train, self.y_train)
             self.y_train_pred = self.knn.predict(self.X_train)  
             self.y_test_pred = self.knn.predict(self.X_test)
-            print(f"Train accuracy is :{accuracy_score(self.y_train,self.y_train_pred):.4f}")
-            print(f"Train loss is :{mean_squared_error(self.y_train,self.y_train_pred):.4f}")
+            print(f"Train accuracy is: {accuracy_score(self.y_train, self.y_train_pred):.4f}")
+            print(f"Train loss is: {mean_squared_error(self.y_train, self.y_train_pred):.4f}")
             print(f"Train classification report:\n{classification_report(self.y_train, self.y_train_pred)}")
             print(f"Train confusion matrix:\n{confusion_matrix(self.y_train, self.y_train_pred)}")
-            print(f"Test accuracy is :{accuracy_score(self.y_test,self.y_test_pred):.4f}")
-            print(f"Test loss is :{mean_squared_error(self.y_test,self.y_test_pred):.4f}")
+            print(f"Test accuracy is: {accuracy_score(self.y_test, self.y_test_pred):.4f}")
+            print(f"Test loss is: {mean_squared_error(self.y_test, self.y_test_pred):.4f}")
             print(f"Test classification report:\n{classification_report(self.y_test, self.y_test_pred)}")
             print(f"Test confusion matrix:\n{confusion_matrix(self.y_test, self.y_test_pred)}")
         except Exception as e:
-            print(f"Error occured in knn method is :{e}")
+            print(f"Error occurred in knn method: {e}")
         print("\n-----------------------------------")
+
     def naive_bayes(self):
         try:
-            print("\n------ Naive_bayes ------\n")
+            print("\n------ Naive Bayes ------\n")
             self.nb = GaussianNB()
-            self.nb.fit(self.X_train,self.y_train)
+            self.nb.fit(self.X_train, self.y_train)
             self.y_train_pred = self.nb.predict(self.X_train)  
             self.y_test_pred = self.nb.predict(self.X_test)
-            print(f"Train accuracy is :{accuracy_score(self.y_train,self.y_train_pred):.4f}")
-            print(f"Train loss is :{mean_squared_error(self.y_train,self.y_train_pred):.4f}")
+            print(f"Train accuracy is: {accuracy_score(self.y_train, self.y_train_pred):.4f}")
+            print(f"Train loss is: {mean_squared_error(self.y_train, self.y_train_pred):.4f}")
             print(f"Train classification report:\n{classification_report(self.y_train, self.y_train_pred)}")
             print(f"Train confusion matrix:\n{confusion_matrix(self.y_train, self.y_train_pred)}")
-            print(f"Test accuracy is :{accuracy_score(self.y_test,self.y_test_pred):.4f}")
-            print(f"Test loss is :{mean_squared_error(self.y_test,self.y_test_pred):.4f}")
+            print(f"Test accuracy is: {accuracy_score(self.y_test, self.y_test_pred):.4f}")
+            print(f"Test loss is: {mean_squared_error(self.y_test, self.y_test_pred):.4f}")
             print(f"Test classification report:\n{classification_report(self.y_test, self.y_test_pred)}")
             print(f"Test confusion matrix:\n{confusion_matrix(self.y_test, self.y_test_pred)}")
         except Exception as e:
-            print(f"Error occured in naive_bayes method is :{e}")
+            print(f"Error occurred in naive_bayes method: {e}")
         print("\n-----------------------------------")
+
     def decision_tree(self):
         try:
             print("\n------ Decision Tree Classifier ------\n")
-            self.dt = DecisionTreeClassifier(criterion = 'entropy')
-            self.dt.fit(self.X_train,self.y_train)
+            self.dt = DecisionTreeClassifier(criterion='entropy')
+            self.dt.fit(self.X_train, self.y_train)
             self.y_train_pred = self.dt.predict(self.X_train)  
             self.y_test_pred = self.dt.predict(self.X_test)
-            print(f"Train accuracy is :{accuracy_score(self.y_train,self.y_train_pred):.4f}")
-            print(f"Train loss is :{mean_squared_error(self.y_train,self.y_train_pred):.4f}")
+            print(f"Train accuracy is: {accuracy_score(self.y_train, self.y_train_pred):.4f}")
+            print(f"Train loss is: {mean_squared_error(self.y_train, self.y_train_pred):.4f}")
             print(f"Train classification report:\n{classification_report(self.y_train, self.y_train_pred)}")
             print(f"Train confusion matrix:\n{confusion_matrix(self.y_train, self.y_train_pred)}")
-            print(f"Test accuracy is :{accuracy_score(self.y_test,self.y_test_pred):.4f}")
-            print(f"Test loss is :{mean_squared_error(self.y_test,self.y_test_pred):.4f}")
+            print(f"Test accuracy is: {accuracy_score(self.y_test, self.y_test_pred):.4f}")
+            print(f"Test loss is: {mean_squared_error(self.y_test, self.y_test_pred):.4f}")
             print(f"Test classification report:\n{classification_report(self.y_test, self.y_test_pred)}")
             print(f"Test confusion matrix:\n{confusion_matrix(self.y_test, self.y_test_pred)}")
         except Exception as e:
-            print(f"Error occured in decision_tree method is :{e}")
+            print(f"Error occurred in decision_tree method: {e}")
         print("\n-----------------------------------")
+
     def random_forest_classifier(self):
         try:
             print("\n------ Random Forest Classifier ------\n")
-            for i in range(1,20,2):
-              print(f"\nNumber of estimators are :[{i}]\n")
-              self.rf = RandomForestClassifier(n_estimators=i,criterion='entropy')
-              self.rf.fit(self.X_train,self.y_train)
-              self.y_train_pred = self.rf.predict(self.X_train)  
-              self.y_test_pred = self.rf.predict(self.X_test)
-              print(f"Train accuracy is :{accuracy_score(self.y_train,self.y_train_pred):.4f}")
-              print(f"Train loss is :{mean_squared_error(self.y_train,self.y_train_pred):.4f}")
-              print(f"Train classification report:\n{classification_report(self.y_train, self.y_train_pred)}")
-              print(f"Train confusion matrix:\n{confusion_matrix(self.y_train, self.y_train_pred)}")
-              print(f"Test accuracy is :{accuracy_score(self.y_test,self.y_test_pred):.4f}")
-              print(f"Test loss is :{mean_squared_error(self.y_test,self.y_test_pred):.4f}")
-              print(f"Test classification report:\n{classification_report(self.y_test, self.y_test_pred)}")
-              print(f"Test confusion matrix:\n{confusion_matrix(self.y_test, self.y_test_pred)}")
+            for i in range(1, 20, 2):
+                print(f"\nNumber of estimators are: [{i}]\n")
+                self.rf = RandomForestClassifier(n_estimators=i, criterion='entropy')
+                self.rf.fit(self.X_train, self.y_train)
+                self.y_train_pred = self.rf.predict(self.X_train)  
+                self.y_test_pred = self.rf.predict(self.X_test)
+                print(f"Train accuracy is: {accuracy_score(self.y_train, self.y_train_pred):.4f}")
+                print(f"Train loss is: {mean_squared_error(self.y_train, self.y_train_pred):.4f}")
+                print(f"Train classification report:\n{classification_report(self.y_train, self.y_train_pred)}")
+                print(f"Train confusion matrix:\n{confusion_matrix(self.y_train, self.y_train_pred)}")
+                print(f"Test accuracy is: {accuracy_score(self.y_test, self.y_test_pred):.4f}")
+                print(f"Test loss is: {mean_squared_error(self.y_test, self.y_test_pred):.4f}")
+                print(f"Test classification report:\n{classification_report(self.y_test, self.y_test_pred)}")
+                print(f"Test confusion matrix:\n{confusion_matrix(self.y_test, self.y_test_pred)}")
         except Exception as e:
-            print(f"Error occured in random_forest_classifier method is :{e}")
+            print(f"Error occurred in random_forest_classifier method: {e}")
         print("\n-----------------------------------")
+
 if __name__ == "__main__":
-        try:
-            obj = All_Regressions('50_Startups.csv')
-            obj.training()
-            obj.linear_regression()
-            obj.logistic_regression()
-            obj.knn()
-            obj.naive_bayes()
-            obj.decision_tree()
-            obj.random_forest_classifier()
-        except Exception as e:
-            print(f"Error is :{e}")
+    try:
+        obj = All_Regressions('50_Startups.csv')
+        obj.training()
+        obj.linear_regression()
+        obj.logistic_reg
